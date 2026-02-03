@@ -6,6 +6,7 @@ interface Book {
     author?: string
     cover?: string
     freeUrl?: string
+    isbn?: string
 }
 
 export default function BookSearch() {
@@ -23,14 +24,14 @@ export default function BookSearch() {
 
         try {
             const response = await fetch(
-                `https://libris.kb.se/xsearch?query=TIT:"${encodeURIComponent(query)}"&format=json`
+                `https://libris.kb.se/xsearch?query=TIT:"${encodeURIComponent(query)}"&format=json&from=1&to=50`
             )
             const data = await response.json()
             const list = data?.xsearch?.list || []
 
-            // Filtrera så att endast böcker visas
+            // Filtrera så att endast poster med exakt type "book" visas
             const bookRecords = list.filter((rec: any) =>
-                rec.type?.toLowerCase().includes('book') || rec.type?.toLowerCase().includes('text')
+                rec.type === 'book' && rec.language === 'swe'
             )
 
             if (bookRecords.length === 0) {
@@ -38,27 +39,32 @@ export default function BookSearch() {
                 setLoading(false)
                 return
             }
+            const results: Book[] = bookRecords
+                .map((rec: any) => {
+                    let coverUrl: string | undefined
+                    const lbId = rec.identifier?.replace('http://libris.kb.se/bib/', '')
+                    let isbn: string | undefined
+                    if (rec.isbn) isbn = Array.isArray(rec.isbn) ? rec.isbn[0] : rec.isbn
 
-            const results: Book[] = bookRecords.map((rec: any) => {
-                // Försök hämta Libris-omslag via identifier
-                let coverUrl
-                if (rec.identifier) {
-                    const id = rec.identifier.split('/').pop()
-                    coverUrl = `https://xinfo.libris.kb.se/xinfo/getxinfo?identifier=/PICTURE/digi/libris-bib/${id}/${id}.jpg/hitlist`
-                }
+                    if (isbn) {
+                        coverUrl = `https://xinfo.libris.kb.se/xinfo/getxinfo?identifier=/PICTURE/bokrondellen/isbn/${isbn}/${isbn}.jpg/record`
+                    } else if (lbId) {
+                        coverUrl = `https://xinfo.libris.kb.se/xinfo/getxinfo?identifier=/PICTURE/tomasgift/libris-bib/${lbId}/${lbId}/record`
+                    }
 
-                // Om ingen Libris-bild, fallback till Open Library via ISBN
-                if (!coverUrl && rec.isbn && rec.isbn.length > 0) {
-                    coverUrl = `https://covers.openlibrary.org/b/isbn/${rec.isbn[0]}-M.jpg?default=false`
-                }
+                    return {
+                        title: rec.title || 'Ingen titel',
+                        author: rec.creator || rec.publisher?.[0] || 'Ingen författare',
+                        cover: coverUrl,
+                        freeUrl: rec?.free?.[0] || undefined,
+                        isbn,
+                    }
+                })
+                .filter(
+                    (book: Book): book is Book & { cover: string } =>
+                        typeof book.cover === 'string' && book.cover.length > 0
+                )
 
-                return {
-                    title: rec.title || 'Ingen titel',
-                    author: rec.creator || rec.publisher?.[0] || 'Ingen författare',
-                    cover: coverUrl,
-                    freeUrl: rec?.free?.[0] || undefined,
-                }
-            })
 
             setBooks(results)
         } catch (err) {
@@ -113,8 +119,9 @@ export default function BookSearch() {
                                 src={book.cover}
                                 alt={book.title}
                                 className="w-32 h-40 object-cover mb-2 rounded-lg"
-                                onError={(e) => {
-                                    e.currentTarget.style.display = 'none'
+                                onError={() => {
+                                    // Ta bort boken från listan om bilden inte laddas
+                                    setBooks(prev => prev.filter((_, idx) => idx !== i))
                                 }}
                             />
                         ) : (
@@ -143,6 +150,7 @@ export default function BookSearch() {
                     </div>
                 ))}
             </div>
+
 
             <button
                 onClick={() => navigate('/read')}
