@@ -24,28 +24,29 @@ export default function BookSearch() {
 
         try {
             const response = await fetch(
-                `https://libris.kb.se/xsearch?query=TIT:"${encodeURIComponent(query)}"&format=json&from=1&to=50`
+                `https://libris.kb.se/xsearch?query=TIT:"${encodeURIComponent(
+                    query
+                )}"&format=json&from=1&to=200`
             )
             const data = await response.json()
             const list = data?.xsearch?.list || []
 
-            // Filtrera så att endast poster med exakt type "book" visas
-            const bookRecords = list.filter((rec: any) =>
-                rec.type === 'book' && rec.language === 'swe'
-            )
+            // Endast svenska böcker
+            const bookRecords = list.filter((rec: any) => rec.type === 'book' && rec.language === 'swe')
 
             if (bookRecords.length === 0) {
                 setError('Inga böcker hittades')
                 setLoading(false)
                 return
             }
+
             const results: Book[] = bookRecords
                 .map((rec: any) => {
-                    let coverUrl: string | undefined
                     const lbId = rec.identifier?.replace('http://libris.kb.se/bib/', '')
                     let isbn: string | undefined
                     if (rec.isbn) isbn = Array.isArray(rec.isbn) ? rec.isbn[0] : rec.isbn
 
+                    let coverUrl: string | undefined
                     if (isbn) {
                         coverUrl = `https://xinfo.libris.kb.se/xinfo/getxinfo?identifier=/PICTURE/bokrondellen/isbn/${isbn}/${isbn}.jpg/record`
                     } else if (lbId) {
@@ -60,11 +61,7 @@ export default function BookSearch() {
                         isbn,
                     }
                 })
-                .filter(
-                    (book: Book): book is Book & { cover: string } =>
-                        typeof book.cover === 'string' && book.cover.length > 0
-                )
-
+                .filter((book: Book): book is Book & { cover: string } => !!book.cover)
 
             setBooks(results)
         } catch (err) {
@@ -74,6 +71,7 @@ export default function BookSearch() {
             setLoading(false)
         }
     }
+
 
     const handleMarkRead = (book: Book) => {
         const saved = JSON.parse(localStorage.getItem('readBooks') || '[]')

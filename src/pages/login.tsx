@@ -29,56 +29,64 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pink-200 via-yellow-100 to-green-200 px-4">
-      <div className="w-full max-w-sm bg-white p-6 rounded-3xl shadow-2xl flex flex-col items-center">
-        <p className="text-3xl font-bold mb-6 text-pink-500">Logga in med QR</p>
+  <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-100 to-green-200 px-4 flex items-center justify-center">
+  <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6">
+    {/* Titel */}
+    <h1 className="text-2xl font-extrabold text-center text-pink-500 mb-6">
+      Logga in med QR
+    </h1>
 
-        {/* Textinput för manuell QR-kod */}
-        <input
-          type="text"
-          placeholder="Skriv QR-kod här"
-          value={qrCode}
-          onChange={(e) => setQrCode(e.target.value)}
-          className="w-full px-4 py-3 text-black border-4 border-blue-300 rounded-xl mb-4 focus:outline-none focus:ring-4 focus:ring-pink-300"
-        />
+    {/* Textinput */}
+    <input
+      type="text"
+      placeholder="Skriv QR-kod här"
+      value={qrCode}
+      onChange={(e) => setQrCode(e.target.value)}
+      className="w-full px-4 py-3 text-sm rounded-xl border-2 border-pink-200 focus:outline-none focus:ring-4 focus:ring-pink-200 mb-4"
+    />
+
+    {/* Logga in-knapp */}
+    <button
+      onClick={() => handleLogin(qrCode)}
+      className="w-full bg-yellow-400 text-pink-700 py-3 rounded-xl font-bold shadow-md active:scale-95 transition mb-6"
+    >
+      Logga in
+    </button>
+
+    {/* Kamera / Scanner */}
+    {!scanning ? (
+      <button
+        onClick={() => setScanning(true)}
+        className="w-full flex items-center justify-center gap-2 bg-blue-400 text-white py-3 rounded-xl font-semibold shadow-md active:scale-95 transition"
+      >
+        <FaCamera size={18} />
+        Skanna QR-kod
+      </button>
+    ) : (
+      <div className="w-full mt-4">
+        <div className="rounded-2xl overflow-hidden border-2 border-purple-300 shadow-md">
+          <Scanner
+            onScan={(detectedCodes: IDetectedBarcode[]) => {
+              if (detectedCodes.length > 0) {
+                const scanned = detectedCodes[0].rawValue
+                if (scanned) handleLogin(scanned)
+              }
+            }}
+            onError={(error: unknown) => console.error(error)}
+            constraints={{ facingMode: 'environment' }}
+            styles={{ video: { width: '100%' } }}
+          />
+        </div>
+
         <button
-          onClick={() => handleLogin(qrCode)}
-          className="w-full bg-yellow-400 text-pink-600 py-3 rounded-xl font-bold hover:bg-yellow-500 mb-6 transition-colors"
+          onClick={() => setScanning(false)}
+          className="w-full mt-3 bg-red-400 text-white py-2.5 rounded-xl font-semibold shadow-md active:scale-95 transition"
         >
-          Logga in
+          Avbryt
         </button>
-
-        {/* Kamera-knapp */}
-        {!scanning ? (
-          <button
-            onClick={() => setScanning(true)}
-            className="flex items-center gap-3 bg-blue-400 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-colors"
-          >
-            <FaCamera size={20} />
-            Skanna QR-kod
-          </button>
-        ) : (
-          <div className="w-full rounded-xl overflow-hidden border-4 border-purple-300 shadow-lg">
-            <Scanner
-              onScan={(detectedCodes: IDetectedBarcode[]) => {
-                if (detectedCodes.length > 0) {
-                  const scanned = detectedCodes[0].rawValue
-                  if (scanned) handleLogin(scanned)
-                }
-              }}
-              onError={(error: unknown) => console.error(error)}
-              constraints={{ facingMode: 'environment' }}
-              styles={{ video: { width: '100%' } }}
-            />
-            <button
-              onClick={() => setScanning(false)}
-              className="mt-2 w-full bg-red-400 hover:bg-red-500 text-white py-2 rounded-xl font-semibold"
-            >
-              Avbryt
-            </button>
-          </div>
-        )}
       </div>
-    </div>
+    )}
+  </div>
+</div>
   )
 }

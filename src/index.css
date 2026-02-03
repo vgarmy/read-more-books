@@ -19,8 +19,6 @@
 html, body {
   margin: 0;
   font-family: var(--font-fredoka); /* använder variabeln */
-  display: flex;
-  place-items: center;
   min-height: 100vh;
   background-color: #242424; /* säkerställ att body också får bakgrund */
   color: rgba(255, 255, 255, 0.87);
