@@ -7,5 +7,5 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss()],
-  base: "/read-more-books"
+    base: "/read-more-books"
 })

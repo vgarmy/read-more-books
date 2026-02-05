@@ -3,7 +3,7 @@ import KidsNav from './components/kidsNav'
 
 export default function VarforLasa() {
   const menuItems = [
-    { to: '/', label: 'Hem' },
+    { to: '/read-more-books', label: 'Hem' },
     { to: '/varforlasa', label: 'Varför läsa' }
   ]
 

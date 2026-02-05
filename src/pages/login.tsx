@@ -30,7 +30,7 @@ export default function Login() {
   }
 
   // ✅ Endast en länk i menyn för denna sida
-  const loginOnlyMenu = [{ to: '/', label: 'Login' },
+  const loginOnlyMenu = [{ to: '/read-more-books', label: 'Login' },
      { to: '/varforlasa', label: 'Varför läsa' }
   ]
   

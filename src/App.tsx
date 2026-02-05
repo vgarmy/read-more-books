@@ -9,7 +9,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/read-more-books" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/varforlasa" element={<VarforLasa />} />
         <Route path="/booksearch" element={<BookSearch />} />
