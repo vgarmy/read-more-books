@@ -29,23 +29,18 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
     <header
       className="
         sticky top-0 z-50
-        /* Safe area längst upp (iPhone notch / statusbar) */
         [padding-top:env(safe-area-inset-top)]
       "
-      /* Fallback om env() saknas: */
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       <div className="relative">
-        {/* 🎨 Gradient + nästan platt våg som klipper (under är 100% transparent) */}
+        {/* 🎨 Endast gradient + våg-clip i bakgrunden */}
         <div className="absolute inset-x-0 top-0 -z-10">
           <svg
             aria-hidden="true"
             viewBox="0 0 1440 160"
             preserveAspectRatio="none"
-            className="
-              block w-full h-28 md:h-32 lg:h-36
-              drop-shadow-xl
-            "
+            className="block w-full h-28 md:h-32 lg:h-36"
           >
             <defs>
               <linearGradient id="kidsGrad" x1="0" y1="0" x2="1" y2="0">
@@ -67,23 +62,18 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
               </clipPath>
             </defs>
 
-            {/* Ingen rx → övre hörnet helt rakt */}
             <rect width="1440" height="160" fill="url(#kidsGrad)" clipPath="url(#waveClip)" />
           </svg>
         </div>
 
-        {/* Topprad: Titel + hamburgare */}
+        {/* Topprad: Titel + hamburgare (helt transparent) */}
         <nav
           className="
-            px-4 pb-5
+            px-4 pt-3 pb-5
             flex items-center justify-between select-none
-            /* Gör headern läsbar ovanpå gradienten */
-            bg-white/30 backdrop-blur
-            shadow-sm
-            rounded-b-3xl
           "
-          /* Extra topp-paddning för statusbar + spacing */
           style={{
+            // extra topp-spacer under statusbar
             paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)',
           }}
           aria-label="Huvudnavigation"
@@ -102,7 +92,6 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
             className="
               p-2 rounded-xl
               bg-white/80 hover:bg-white
-              backdrop-blur
               shadow-md
               active:scale-95 transition
               text-fuchsia-700 text-xl
@@ -114,7 +103,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
         </nav>
       </div>
 
-      {/* Rullgardinsmeny med mjuk slide */}
+      {/* Rullgardinsmeny (oförändrad, men utan blur/platta över vågen) */}
       <div
         id="kidsnav-menu"
         className={`
@@ -127,7 +116,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
           <div className="px-4 pb-4">
             <ul
               className="
-                bg-white/90 backdrop-blur
+                bg-white
                 rounded-3xl shadow-xl p-3
                 space-y-2 border border-white/60
               "
