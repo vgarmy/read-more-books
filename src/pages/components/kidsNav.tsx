@@ -2,22 +2,14 @@ import { useState, useEffect, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FaBars, FaTimes } from 'react-icons/fa'
 
-type NavItem = {
-  to: string
-  label: string
-  icon?: ReactNode
-}
-
-type KidsNavProps = {
-  items: NavItem[]
-  title?: string
-}
+type NavItem = { to: string; label: string; icon?: ReactNode }
+type KidsNavProps = { items: NavItem[]; title?: string }
 
 export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
   const [open, setOpen] = useState(false)
   const location = useLocation()
 
-  // Lås body-scroll när menyn är öppen (mobilvänligt)
+  // Lås body-scroll när menyn är öppen (mobil)
   useEffect(() => {
     const body = document.body
     if (open) body.classList.add('overflow-hidden')
@@ -25,17 +17,18 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
     return () => body.classList.remove('overflow-hidden')
   }, [open])
 
+  // Cap-höjd: safe area top + navhöjd (ca 64px) + lite luft
+  const capHeight = 'calc(env(safe-area-inset-top, 0px) + 72px)'
+
   return (
-    <header
-      className="
-        sticky top-0 z-50
-        [padding-top:env(safe-area-inset-top)]
-      "
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
-    >
-      <div className="relative">
-        {/* 🎨 Endast gradient + våg-clip i bakgrunden */}
-        <div className="absolute inset-x-0 top-0 -z-10">
+    <header className="sticky top-0 z-50">
+      {/* CAP: här ritas gradient + våg, och nav ligger ovanpå */}
+      <div
+        className="relative select-none"
+        style={{ height: capHeight, paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      >
+        {/* Gradient + våg: förankrad i botten av capen */}
+        <div className="absolute inset-x-0 bottom-0 -z-10">
           <svg
             aria-hidden="true"
             viewBox="0 0 1440 160"
@@ -44,38 +37,30 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
           >
             <defs>
               <linearGradient id="kidsGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"  stopColor="#f9a8d4" /> {/* pink-300 */}
+                <stop offset="0%" stopColor="#f9a8d4" /> {/* pink-300 */}
                 <stop offset="50%" stopColor="#fde68a" /> {/* amber-200 */}
                 <stop offset="100%" stopColor="#6ee7b7" /> {/* emerald-300 */}
               </linearGradient>
-
-              {/* Minimal amplitud: 92–108–100 → nästan rakt men organiskt */}
               <clipPath id="waveClip" clipPathUnits="userSpaceOnUse">
-                <path d="
-                  M0,0
-                  H1440
-                  V100
-                  C1200,92 960,108 720,100
-                  480,92 240,108 0,100
-                  Z
-                " />
+                <path
+                  d="
+                    M0,0
+                    H1440
+                    V100
+                    C1200,92 960,108 720,100
+                    480,92 240,108 0,100
+                    Z
+                  "
+                />
               </clipPath>
             </defs>
-
             <rect width="1440" height="160" fill="url(#kidsGrad)" clipPath="url(#waveClip)" />
           </svg>
         </div>
 
-        {/* Topprad: Titel + hamburgare (helt transparent) */}
+        {/* Nav-raden – ligger inuti capen, ovanpå gradienten */}
         <nav
-          className="
-            px-4 pt-3 pb-5
-            flex items-center justify-between select-none
-          "
-          style={{
-            // extra topp-spacer under statusbar
-            paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)',
-          }}
+          className="px-4 flex items-center justify-between h-full"
           aria-label="Huvudnavigation"
         >
           <Link to="/home" className="group" aria-label={`${title} startsida`}>
@@ -103,7 +88,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
         </nav>
       </div>
 
-      {/* Rullgardinsmeny (oförändrad, men utan blur/platta över vågen) */}
+      {/* Rullgardinsmeny – renderas under vågen (ingen platta över toppen) */}
       <div
         id="kidsnav-menu"
         className={`
