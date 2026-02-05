@@ -48,7 +48,7 @@ export default function Login() {
         "
         style={{
           // Säkert utrymme under headern (sticky + statusbar + dekor)
-          paddingTop: 'max(84px, calc(64px + env(safe-area-inset-top, 0px)))'
+          paddingTop: 'max(44px, calc(34px + env(safe-area-inset-top, 0px)))'
         }}
       >
         <section className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6">
