@@ -111,7 +111,7 @@ ${F}`}class _t extends Error{constructor({message:n,code:i,cause:s,name:o}){var 
                       `,children:[h.icon?k.jsx("span",{className:"text-lg",children:h.icon}):null,k.jsx("span",{className:"font-semibold",children:h.label})]})},h.to)})})})})})]})}function qS(){const[a,n]=B.useState(""),[i,s]=B.useState(!1),o=Gu(),u=async d=>{if(!d)return alert("Ingen QR-kod hittad!");const{data:g,error:p}=await or.from("children").select("*").eq("qr_code",d).single();p||!g?alert("QR-koden hittades inte!"):(localStorage.setItem("loggedChild",JSON.stringify(g)),o("/home"))},h=[{to:"/read-more-books",label:"Login"},{to:"/varforlasa",label:"Varför läsa"}];return k.jsxs("div",{className:"min-h-[100dvh] bg-gradient-to-br from-pink-200 via-yellow-100 to-green-200",children:[k.jsx(Ul,{items:h,title:"VI LÄSER!"}),k.jsx("main",{className:`\r
           px-4 pb-10\r
           flex items-start justify-center\r
-        `,style:{paddingTop:"max(84px, calc(64px + env(safe-area-inset-top, 0px)))"},children:k.jsxs("section",{className:"w-full max-w-sm bg-white rounded-3xl shadow-xl p-6",children:[k.jsx("h1",{className:"text-4xl font-extrabold text-center text-pink-500 mb-6",children:"Logga in med QR"}),k.jsx("input",{type:"text",placeholder:"Skriv QR-kod här",value:a,onChange:d=>n(d.target.value),className:`\r
+        `,children:k.jsxs("section",{className:"w-full max-w-sm bg-white rounded-3xl shadow-xl p-6",children:[k.jsx("h1",{className:"text-4xl font-extrabold text-center text-pink-500 mb-6",children:"Logga in med QR"}),k.jsx("input",{type:"text",placeholder:"Skriv QR-kod här",value:a,onChange:d=>n(d.target.value),className:`\r
               w-full px-4 py-3\r
               text-base\r
               rounded-xl border-2 border-pink-200\r
