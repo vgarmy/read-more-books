@@ -1,14 +1,40 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/read-more-books/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read-more</title>
-    <script type="module" crossorigin src="/read-more-books/assets/index-YkPCSaDg.js"></script>
-    <link rel="stylesheet" crossorigin href="/read-more-books/assets/index-C0UhWXHG.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<html lang="sv">
+
+<head>
+  <!-- Grund -->
+  <meta charset="UTF-8" />
+  <title>VI LÄSER!</title>
+
+  <!-- Viewport – KRITISK för iOS webapp -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- iOS: kör som webapp (utan Safari-UI) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Theme / statusbar-färg -->
+  <meta name="theme-color" content="#f472b6" />
+
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/read-more-books/manifest.webmanifest" />
+
+  <!-- Apple Touch Icon (iOS hemskärm) -->
+  <link rel="apple-touch-icon" href="/read-more-books/icons/apple-touch-icon.png" sizes="180x180" />
+
+  <!-- (Valfritt) favicon -->
+  <link rel="icon" type="image/png" href="/read-more-books/icons/icon-192.png" />
+
+  <!-- Förhindra text-auto-zoom på iOS (inputs fixas i React) -->
+  <meta name="format-detection" content="telephone=no" />
+  <script type="module" crossorigin src="/read-more-books/assets/index-BAkSK6Xq.js"></script>
+  <link rel="stylesheet" crossorigin href="/read-more-books/assets/index-DWSed3Gp.css">
+</head>
+
+<body class="bg-white">
+  <div id="root"></div>
+
+</body>
+
 </html>
