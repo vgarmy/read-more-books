@@ -1,7 +1,7 @@
 {
   "name": "VI LÄSER!",
   "short_name": "ViLäser",
-  "start_url": "/home",
+  "start_url": "/read-more-books",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
