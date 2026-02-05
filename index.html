@@ -1,13 +1,39 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read-more</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<html lang="sv">
+
+<head>
+  <!-- Grund -->
+  <meta charset="UTF-8" />
+  <title>VI LÄSER!</title>
+
+  <!-- Viewport – KRITISK för iOS webapp -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- iOS: kör som webapp (utan Safari-UI) -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Theme / statusbar-färg -->
+  <meta name="theme-color" content="#f472b6" />
+
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <!-- Apple Touch Icon (iOS hemskärm) -->
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+
+  <!-- (Valfritt) favicon -->
+  <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+
+  <!-- Förhindra text-auto-zoom på iOS (inputs fixas i React) -->
+  <meta name="format-detection" content="telephone=no" />
+</head>
+
+<body class="bg-white">
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

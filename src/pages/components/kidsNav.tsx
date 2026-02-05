@@ -17,7 +17,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
   const [open, setOpen] = useState(false)
   const location = useLocation()
 
-  // (Valfritt) Lås body-scroll när menyn är öppen
+  // Lås body-scroll när menyn är öppen (mobilvänligt)
   useEffect(() => {
     const body = document.body
     if (open) body.classList.add('overflow-hidden')
@@ -26,7 +26,15 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50">
+    <header
+      className="
+        sticky top-0 z-50
+        /* Safe area längst upp (iPhone notch / statusbar) */
+        [padding-top:env(safe-area-inset-top)]
+      "
+      /* Fallback om env() saknas: */
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+    >
       <div className="relative">
         {/* 🎨 Gradient + nästan platt våg som klipper (under är 100% transparent) */}
         <div className="absolute inset-x-0 top-0 -z-10">
@@ -34,13 +42,16 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
             aria-hidden="true"
             viewBox="0 0 1440 160"
             preserveAspectRatio="none"
-            className="block w-full h-28 md:h-32 lg:h-36 drop-shadow-xl"
+            className="
+              block w-full h-28 md:h-32 lg:h-36
+              drop-shadow-xl
+            "
           >
             <defs>
               <linearGradient id="kidsGrad" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%"  stopColor="#f9a8d4" /> {/* pink-300 */}
                 <stop offset="50%" stopColor="#fde68a" /> {/* amber-200 */}
-                <stop offset="100%" stopColor="#6ee7b7" />{/* emerald-300 */}
+                <stop offset="100%" stopColor="#6ee7b7" /> {/* emerald-300 */}
               </linearGradient>
 
               {/* Minimal amplitud: 92–108–100 → nästan rakt men organiskt */}
@@ -56,13 +67,27 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
               </clipPath>
             </defs>
 
-            {/* Ingen rx → övre högra hörnet är helt rakt */}
+            {/* Ingen rx → övre hörnet helt rakt */}
             <rect width="1440" height="160" fill="url(#kidsGrad)" clipPath="url(#waveClip)" />
           </svg>
         </div>
 
         {/* Topprad: Titel + hamburgare */}
-        <nav className="px-4 pt-5 pb-7 flex items-center justify-between select-none">
+        <nav
+          className="
+            px-4 pb-5
+            flex items-center justify-between select-none
+            /* Gör headern läsbar ovanpå gradienten */
+            bg-white/30 backdrop-blur
+            shadow-sm
+            rounded-b-3xl
+          "
+          /* Extra topp-paddning för statusbar + spacing */
+          style={{
+            paddingTop: 'calc(env(safe-area-inset-top, 0px) + 10px)',
+          }}
+          aria-label="Huvudnavigation"
+        >
           <Link to="/home" className="group" aria-label={`${title} startsida`}>
             <h1 className="text-2xl font-extrabold tracking-wide text-fuchsia-700 drop-shadow-sm -skew-x-3 group-hover:skew-x-0 transition">
               <span className="inline-block">{title}</span>
@@ -74,12 +99,17 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
             aria-expanded={open}
             aria-controls="kidsnav-menu"
             aria-label={open ? 'Stäng meny' : 'Öppna meny'}
-            className="p-2 rounded-xl bg-white/70 backdrop-blur shadow-md hover:bg-white active:scale-95 transition"
+            className="
+              p-2 rounded-xl
+              bg-white/80 hover:bg-white
+              backdrop-blur
+              shadow-md
+              active:scale-95 transition
+              text-fuchsia-700 text-xl
+            "
           >
             <span className="sr-only">{open ? 'Stäng meny' : 'Öppna meny'}</span>
-            <div className="text-fuchsia-700 text-xl">
-              {open ? <FaTimes /> : <FaBars />}
-            </div>
+            {open ? <FaTimes /> : <FaBars />}
           </button>
         </nav>
       </div>
@@ -87,26 +117,39 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
       {/* Rullgardinsmeny med mjuk slide */}
       <div
         id="kidsnav-menu"
-        className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out origin-top
-                    ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+        className={`
+          grid overflow-hidden
+          transition-[grid-template-rows,opacity] duration-300 ease-out origin-top
+          ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}
+        `}
       >
         <div className="min-h-0">
           <div className="px-4 pb-4">
-            <ul className="bg-white rounded-3xl shadow-xl p-3 space-y-2 border border-white/60">
+            <ul
+              className="
+                bg-white/90 backdrop-blur
+                rounded-3xl shadow-xl p-3
+                space-y-2 border border-white/60
+              "
+              role="menu"
+              aria-label="Menyval"
+            >
               {items.map((item) => {
                 const active = location.pathname === item.to
                 return (
-                  <li key={item.to}>
+                  <li key={item.to} role="none">
                     <Link
                       to={item.to}
+                      role="menuitem"
                       onClick={() => setOpen(false)}
-                      className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition shadow-sm active:scale-95
+                      className={`
+                        flex items-center gap-3 px-3 py-3 rounded-2xl transition shadow-sm active:scale-95
                         ${active
                           ? 'bg-fuchsia-50 text-fuchsia-700 ring-2 ring-fuchsia-200'
                           : 'bg-gradient-to-r from-amber-50 to-emerald-50 text-slate-700 hover:from-amber-100 hover:to-emerald-100'
-                        }`}
+                        }
+                      `}
                     >
-                      {/* Om du skickar med icon i items syns den här */}
                       {item.icon ? <span className="text-lg">{item.icon}</span> : null}
                       <span className="font-semibold">{item.label}</span>
                     </Link>

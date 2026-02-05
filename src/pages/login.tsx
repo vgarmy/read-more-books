@@ -30,37 +30,61 @@ export default function Login() {
   }
 
   // ✅ Endast en länk i menyn för denna sida
-  const loginOnlyMenu = [{ to: '/read-more-books', label: 'Login' },
-     { to: '/varforlasa', label: 'Varför läsa' }
+  const loginOnlyMenu = [
+    { to: '/read-more-books', label: 'Login' },
+    { to: '/varforlasa', label: 'Varför läsa' }
   ]
-  
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-100 to-green-200">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-pink-200 via-yellow-100 to-green-200">
       {/* Meny med enbart "Login" */}
       <KidsNav items={loginOnlyMenu} title="VI LÄSER!" />
 
-      {/* Padding så innehåll inte hamnar under sticky headern */}
-      <div className="px-4 pt-6 pb-10 flex items-center justify-center">
-        <div className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6">
+      {/* Innehåll – ge plats under sticky header + safe area */}
+      <main
+        className="
+          px-4 pb-10
+          flex items-start justify-center
+        "
+        style={{
+          // Säkert utrymme under headern (sticky + statusbar + dekor)
+          paddingTop: 'max(84px, calc(64px + env(safe-area-inset-top, 0px)))'
+        }}
+      >
+        <section className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6">
           {/* Titel */}
           <h1 className="text-4xl font-extrabold text-center text-pink-500 mb-6">
             Logga in med QR
           </h1>
 
-          {/* Textinput */}
+          {/* Textinput (min 16px för att undvika iOS auto-zoom) */}
           <input
             type="text"
             placeholder="Skriv QR-kod här"
             value={qrCode}
             onChange={(e) => setQrCode(e.target.value)}
-            className="w-full px-4 py-3 text-sm rounded-xl border-2 border-pink-200 focus:outline-none focus:ring-4 focus:ring-pink-200 mb-4"
+            className="
+              w-full px-4 py-3
+              text-base
+              rounded-xl border-2 border-pink-200
+              focus:outline-none focus:ring-4 focus:ring-pink-200
+              mb-4
+            "
+            inputMode="text"
+            autoCapitalize="off"
+            autoCorrect="off"
+            aria-label="QR-kod"
           />
 
           {/* Logga in-knapp */}
           <button
             onClick={() => handleLogin(qrCode)}
-            className="w-full bg-yellow-400 text-pink-700 py-3 rounded-xl font-bold shadow-md active:scale-95 transition mb-6"
+            className="
+              w-full bg-yellow-400 text-pink-700
+              py-3 rounded-xl font-bold shadow-md
+              active:scale-95 transition
+              mb-6
+            "
           >
             Logga in
           </button>
@@ -69,7 +93,13 @@ export default function Login() {
           {!scanning ? (
             <button
               onClick={() => setScanning(true)}
-              className="w-full flex items-center justify-center gap-2 bg-blue-400 text-white py-3 rounded-xl font-semibold shadow-md active:scale-95 transition"
+              className="
+                w-full flex items-center justify-center gap-2
+                bg-blue-400 text-white py-3
+                rounded-xl font-semibold shadow-md
+                active:scale-95 transition
+              "
+              aria-label="Starta kamera för att skanna QR-kod"
             >
               <FaCamera size={18} />
               Skanna QR-kod
@@ -92,17 +122,27 @@ export default function Login() {
 
               <button
                 onClick={() => setScanning(false)}
-                className="w-full mt-3 bg-red-400 text-white py-2.5 rounded-xl font-semibold shadow-md active:scale-95 transition"
+                className="
+                  w-full mt-3 bg-red-400 text-white
+                  py-2.5 rounded-xl font-semibold shadow-md
+                  active:scale-95 transition
+                "
               >
                 Avbryt
               </button>
             </div>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
 
-      {/* Info-sektion (oförändrad) */}
-      <div className="px-6 pt-6 pb-10 max-w-xl mx-auto">
+      {/* Info-sektion (oförändrad, men låt den också respektera safe-area nederkant vid behov) */}
+      <section
+        className="px-6 pt-6 pb-10 max-w-xl mx-auto"
+        style={{
+          // Om du har knappar längst ner i framtiden kan det vara bra med extra botten-padding:
+          paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 0px))'
+        }}
+      >
         <h2 className="text-4xl font-semibold text-slate-800 mb-4">
           En bok idag – tusen ord imorgon
         </h2>
@@ -134,7 +174,7 @@ export default function Login() {
             och låt vardagen pausa en stund.
           </p>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

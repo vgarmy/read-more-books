@@ -23,8 +23,21 @@ html, body {
   min-height: 100vh;
   background-color: #242424; /* säkerställ att body också får bakgrund */
   color: rgba(255, 255, 255, 0.87);
+  height: 100%;
+  overscroll-behavior-y: contain;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--header-font);
+}
+
+/* Mindre “pull-to-refresh” och stabilare scroll på iOS */
+#root {
+  height: 100%;
+  overscroll-behavior-y: contain;
+}
+
+/* Tar bort blå klick-highlight på iOS */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
