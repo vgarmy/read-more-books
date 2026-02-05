@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mouse+Memoirs&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --font-family: 'Fredoka One', cursive;
+  --font-family: 'Roboto', sans-serif;
+  --header-font: 'Mouse Memoirs', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -18,8 +19,12 @@
 
 html, body {
   margin: 0;
-  font-family: var(--font-fredoka); /* använder variabeln */
+  font-family: var(--font-family); /* använder variabeln */
   min-height: 100vh;
   background-color: #242424; /* säkerställ att body också får bakgrund */
   color: rgba(255, 255, 255, 0.87);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--header-font);
 }
