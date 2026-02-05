@@ -46,11 +46,7 @@ export default function Login() {
           px-4 pb-10
           flex items-start justify-center
         "
-        style={{
-          // Säkert utrymme under headern (sticky + statusbar + dekor)
-          paddingTop: 'max(44px, calc(34px + env(safe-area-inset-top, 0px)))'
-        }}
-      >
+              >
         <section className="w-full max-w-sm bg-white rounded-3xl shadow-xl p-6">
           {/* Titel */}
           <h1 className="text-4xl font-extrabold text-center text-pink-500 mb-6">
