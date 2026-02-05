@@ -46,7 +46,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
         />
 
         {/* Gradient + våg: förankrad i botten; fyller den extra tjockleken under nav-raden */}
-        <div className="absolute inset-x-0 bottom-0 -z-10">
+        <div className="absolute inset-x-0 bottom-3 -z-10">
           <svg
             aria-hidden="true"
             viewBox="0 0 1440 160"
