@@ -118,7 +118,7 @@ export default function ReadBooks() {
   return (
     <div className="min-h-screen bg-pink-100">
       <KidsNav items={menuItems} title="VI LÄSER!" />
-      <div className="px-4 pb-10">
+      <div className="px-8 pb-10">
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">Böcker jag har läst</h1>
 
         {loading && <p className="text-center text-gray-600">Laddar...</p>}

@@ -130,7 +130,7 @@ export default function Home() {
     <div className="min-h-screen bg-pink-100">
       <KidsNav items={menuItems} title="VI LÄSER!" />
 
-      <div className="px-4 pb-10 flex flex-col items-center justify-start">
+      <div className="px-8 pb-10 flex flex-col items-center justify-start">
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">
           Välkommen {childData?.name || 'Barnet'}! 🎉
         </h1>
@@ -226,7 +226,7 @@ export default function Home() {
       </div>
 
       {/* Infosektion – oförändrad */}
-      <div className="px-6 pt-6 pb-10 max-w-xl mx-auto">
+      <div className="px-8 pt-6 pb-10 max-w-xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">
           Högläsning i förskolan
         </h1>

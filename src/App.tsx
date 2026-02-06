@@ -28,7 +28,7 @@ export default function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/read-more-books/" element={<Login />} />
-        <Route path="/read-more-books/varforlasa" element={<ReadBooks />} />
+        <Route path="/read-more-books/varforlasa" element={<VarforLasa />} />
 
         {/* Protected routes */}
         <Route
@@ -43,7 +43,7 @@ export default function App() {
           path="/read-more-books/read"
           element={
             <PrivateRoute>
-              <VarforLasa />
+              <ReadBooks />
             </PrivateRoute>
           }
         />

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Scanner } from '@yudiel/react-qr-scanner'
 import type { IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import { supabase } from '../supabaseClient'
-import { FaCamera, FaBookOpen, FaSignInAlt  } from 'react-icons/fa'
+import { FaCamera, FaBookOpen, FaSignInAlt } from 'react-icons/fa'
 import KidsNav from './components/kidsNav'
 
 export default function Login() {
@@ -12,7 +12,7 @@ export default function Login() {
   const [scanning, setScanning] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as any)?.from?.pathname || '/read-more-books/hhome'
+  const from = (location.state as any)?.from?.pathname || '/read-more-books/home'
 
   const handleLogin = async (code: string) => {
     if (!code) return alert('Ingen QR-kod hittad!')
@@ -35,8 +35,8 @@ export default function Login() {
 
   // ✅ Endast en länk i menyn för denna sida
   const loginOnlyMenu = [
-    { to: '/read-more-books/', label: 'Login', icon: <FaSignInAlt  />   },
-    { to: '/read-more-books/varforlasa', label: 'Varför läsa', icon: <FaBookOpen />  }
+    { to: '/read-more-books/', label: 'Login', icon: <FaSignInAlt /> },
+    { to: '/read-more-books/varforlasa', label: 'Varför läsa', icon: <FaBookOpen /> }
   ]
 
   useEffect(() => {
@@ -60,29 +60,64 @@ export default function Login() {
             placeholder="Skriv QR-kod här"
             value={qrCode}
             onChange={(e) => setQrCode(e.target.value)}
-            className="w-full px-4 py-3 text-base rounded-xl border-2 border-pink-200 focus:outline-none focus:ring-4 focus:ring-pink-200 mb-4"
+            className="w-full px-4 py-3 text-base rounded-xl border-2 border-pink-200 text-black focus:outline-none focus:ring-4 focus:ring-pink-200 mb-4"
             inputMode="text"
             autoCapitalize="off"
             autoCorrect="off"
             aria-label="QR-kod"
           />
 
-          <button
-            onClick={() => handleLogin(qrCode)}
-            className="w-full bg-yellow-400 text-pink-700 py-3 rounded-xl font-bold shadow-md active:scale-95 transition mb-6"
-          >
-            Logga in
-          </button>
+          <div className="relative inline-block w-full mb-6">
+            {/* Bottenplattan, ligger bakom knappen */}
+            <span
+              aria-hidden="true"
+              className="
+      pointer-events-none absolute inset-x-0 top-0 bottom-[-4px]
+      rounded-2xl bg-[#FDE047]
+      transition-transform duration-150
+    "
+            />
+
+            {/* Själva knappen */}
+            <button
+              onClick={() => handleLogin(qrCode)}
+              aria-label="Logga in"
+              className="
+      relative z-10 inline-flex w-full items-center justify-center gap-2 align-middle whitespace-nowrap font-sans font-bold uppercase tracking-[0.8px] text-xl leading-5 py-[13px] px-4 rounded-2xl bg-[#FACC15] text-pink-700
+      transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-md disabled:cursor-default disabled:opacity-70 select-none focus:outline-none font-own"
+            >
+              <FaSignInAlt size={18} /> Logga in
+            </button>
+          </div>
 
           {!scanning ? (
-            <button
-              onClick={() => setScanning(true)}
-              className="w-full flex items-center justify-center gap-2 bg-blue-400 text-white py-3 rounded-xl font-semibold shadow-md active:scale-95 transition"
-              aria-label="Starta kamera för att skanna QR-kod"
-            >
-              <FaCamera size={18} />
-              Skanna QR-kod
-            </button>
+            <div className="relative inline-block w-full">
+              {/* Plattan bakom knappen */}
+              <span
+                aria-hidden="true"
+                className="
+      pointer-events-none absolute inset-x-0 top-0 -bottom-1  /* 1 = 4px om din root-font är 16px */
+      rounded-2xl bg-[#1CB0F6]
+    "
+              />
+
+              {/* Själva knappen överst */}
+              <button
+                onClick={() => setScanning(true)}
+                aria-label="Starta kamera för att skanna QR-kod"
+                className={[
+                  "relative z-10 inline-flex w-full items-center justify-center gap-2 align-middle whitespace-nowrap",
+                  "font-sans font-bold uppercase tracking-[0.8px] text-xl leading-5",
+                  "py-[13px] px-4 rounded-2xl text-white bg-[#1899D6]",
+                  "transition duration-200 hover:brightness-110 active:translate-y-[1px]",
+                  "disabled:cursor-default disabled:opacity-70",
+                  "select-none focus:outline-none font-own"
+                ].join(" ")}
+              >
+                <FaCamera size={18} />
+                Skanna QR-kod
+              </button>
+            </div>
           ) : (
             <div className="w-full mt-4">
               <div className="rounded-2xl overflow-hidden border-2 border-purple-300 shadow-md">

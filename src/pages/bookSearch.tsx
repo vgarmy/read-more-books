@@ -208,7 +208,7 @@ export default function BookSearch() {
   return (
     <div className="min-h-screen bg-pink-100">
       <KidsNav items={menuItems} title="VI LÄSER!" />
-      <div className="flex flex-col items-center px-4 pb-10">
+      <div className="flex flex-col items-center px-8 pb-10">
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">Sök efter böcker</h1>
 
         <div className="flex w-full max-w-md mb-4 gap-2">
