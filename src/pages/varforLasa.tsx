@@ -1,10 +1,11 @@
 // src/pages/VarforLasa.tsx
 import KidsNav from './components/kidsNav'
+import { FaBookOpen, FaSignInAlt} from 'react-icons/fa'
 
 export default function VarforLasa() {
   const menuItems = [
-    { to: '/read-more-books', label: 'Hem' },
-    { to: '/varforlasa', label: 'Varför läsa' }
+    { to: '/read-more-books', label: 'Hem', icon: <FaSignInAlt  /> },
+    { to: '/read-more-books/varforlasa', label: 'Varför läsa', icon: <FaBookOpen />  }
   ]
 
   return (

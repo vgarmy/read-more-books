@@ -199,9 +199,9 @@ export default function BookSearch() {
   }
 
   const menuItems = [
-    { to: '/home', label: 'Hem', icon: <FaHome /> },
-    { to: '/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
-    { to: '/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
+    { to: '/read-more-books/home', label: 'Hem', icon: <FaHome /> },
+    { to: '/read-more-books/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
+    { to: '/read-more-books/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
     { action: handleLogout, label: 'Logga ut', icon: <FaSignOutAlt /> },
   ]
 
@@ -234,7 +234,7 @@ export default function BookSearch() {
           })}
         </div>
 
-        <button onClick={() => navigate('/read')} className="mt-6 bg-purple-400 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-500 transition-colors">Se lästa böcker</button>
+        <button onClick={() => navigate('/read-more-books/read')} className="mt-6 bg-purple-400 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-500 transition-colors">Se lästa böcker</button>
 
         {/* MODAL */}
         {modalBook && (

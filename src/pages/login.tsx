@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Scanner } from '@yudiel/react-qr-scanner'
 import type { IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import { supabase } from '../supabaseClient'
-import { FaCamera } from 'react-icons/fa'
+import { FaCamera, FaBookOpen, FaSignInAlt  } from 'react-icons/fa'
 import KidsNav from './components/kidsNav'
 
 export default function Login() {
@@ -12,7 +12,7 @@ export default function Login() {
   const [scanning, setScanning] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as any)?.from?.pathname || '/home'
+  const from = (location.state as any)?.from?.pathname || '/read-more-books/hhome'
 
   const handleLogin = async (code: string) => {
     if (!code) return alert('Ingen QR-kod hittad!')
@@ -35,8 +35,8 @@ export default function Login() {
 
   // ✅ Endast en länk i menyn för denna sida
   const loginOnlyMenu = [
-    { to: '/read-more-books', label: 'Login' },
-    { to: '/varforlasa', label: 'Varför läsa' }
+    { to: '/read-more-books/', label: 'Login', icon: <FaSignInAlt  />   },
+    { to: '/read-more-books/varforlasa', label: 'Varför läsa', icon: <FaBookOpen />  }
   ]
 
   useEffect(() => {

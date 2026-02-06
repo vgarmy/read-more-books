@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }: { children: any }) => {
 
   if (!loggedIn) {
     // Redirect to login, remember attempted page, replace history
-    return <Navigate to="/read-more-books" state={{ from: location }} replace />
+    return <Navigate to="/read-more-books/" state={{ from: location }} replace />
   }
 
   return children
@@ -27,12 +27,12 @@ export default function App() {
     <Router>
       <Routes>
         {/* Public routes */}
-        <Route path="/read-more-books" element={<Login />} />
-        <Route path="/read" element={<ReadBooks />} />
+        <Route path="/read-more-books/" element={<Login />} />
+        <Route path="/read-more-books/varforlasa" element={<ReadBooks />} />
 
         {/* Protected routes */}
         <Route
-          path="/home"
+          path="/read-more-books/home"
           element={
             <PrivateRoute>
               <Home />
@@ -40,7 +40,7 @@ export default function App() {
           }
         />
         <Route
-          path="/varforlasa"
+          path="/read-more-books/read"
           element={
             <PrivateRoute>
               <VarforLasa />
@@ -48,7 +48,7 @@ export default function App() {
           }
         />
         <Route
-          path="/booksearch"
+          path="/read-more-books/booksearch"
           element={
             <PrivateRoute>
               <BookSearch />
@@ -57,7 +57,7 @@ export default function App() {
         />
 
         {/* Optional: catch-all redirects any unknown route to login */}
-        <Route path="*" element={<Navigate to="/read-more-books" replace />} />
+        <Route path="*" element={<Navigate to="/read-more-books/" replace />} />
       </Routes>
     </Router>
   )

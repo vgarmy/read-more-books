@@ -109,9 +109,9 @@ export default function ReadBooks() {
   }
 
   const menuItems = [
-    { to: '/home', label: 'Hem', icon: <FaHome /> },
-    { to: '/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
-    { to: '/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
+    { to: '/read-more-books/home', label: 'Hem', icon: <FaHome /> },
+    { to: '/read-more-books/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
+    { to: '/read-more-books/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
     { action: handleLogout, label: 'Logga ut', icon: <FaSignOutAlt /> },
   ]
 

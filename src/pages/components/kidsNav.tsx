@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FaBars, FaTimes } from 'react-icons/fa'
+import { FaBars, FaTimes, } from 'react-icons/fa'
 
 type NavItem =
   | { to: string; label: string; icon?: ReactNode }               // länk som tidigare
@@ -91,7 +91,7 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
             lineHeight: `${NAV_ROW_HEIGHT}px`
           }}
         >
-          <Link to="/home" className="group" aria-label={`${title} startsida`}>
+          <Link to="/read-more-books/home" className="group" aria-label={`${title} startsida`}>
             <h1
               className="text-2xl font-extrabold tracking-wide text-fuchsia-700 -skew-x-3 group-hover:skew-x-0 transition"
               style={{ lineHeight: 'normal' }} // låt textens egen line-height styra inom flex

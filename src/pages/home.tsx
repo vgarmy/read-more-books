@@ -107,8 +107,6 @@ export default function Home() {
     }
   }, [childData?.id])
 
-  const firstRecent = useMemo(() => recentBooks[0], [recentBooks])
-
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut()
@@ -122,9 +120,9 @@ export default function Home() {
   }
 
   const menuItems = [
-    { to: '/home', label: 'Hem', icon: <FaHome /> },
-    { to: '/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
-    { to: '/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
+    { to: '/read-more-books/home', label: 'Hem', icon: <FaHome /> },
+    { to: '/read-more-books/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
+    { to: '/read-more-books/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
     { action: handleLogout, label: 'Logga ut', icon: <FaSignOutAlt /> },
   ]
 
@@ -142,7 +140,7 @@ export default function Home() {
 
         {/* Primär CTA */}
         <button
-          onClick={() => navigate('/booksearch')}
+          onClick={() => navigate('/read-more-books/booksearch')}
           className="w-full max-w-xs bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg active:scale-95 transition mb-6"
         >
           Sök böcker
