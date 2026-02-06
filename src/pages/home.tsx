@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import KidsNav from './components/kidsNav'
-import { FaHome, FaSearch, FaBookOpen } from 'react-icons/fa'
+import { FaHome, FaSearch, FaBookOpen, FaSignOutAlt } from 'react-icons/fa'
 import { supabase } from '../supabaseClient'
-import challenges from './components/reading_challenges.json' // ⬅️ IMPORTERA DINA 0–5-UTMANINGAR
+import challenges from './components/reading_challenges.json'
 
 type BookRow = {
   id: string
@@ -37,10 +37,10 @@ export default function Home() {
   const navigate = useNavigate()
 
   const [recentBooks, setRecentBooks] = useState<BookRow[]>([])
+  const [monthlyCounts, setMonthlyCounts] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // 🔖 Dagens läsutmaning (stabilt per dag)
   const todaysChallenge = useMemo(() => pickDailyChallenge(challenges), [])
 
   useEffect(() => {
@@ -80,6 +80,23 @@ export default function Home() {
           .map(r => (Array.isArray(r.books) ? r.books[0] ?? null : r.books))
           .filter((b): b is BookRow => !!b)
         setRecentBooks(books)
+
+        // --- Monthly counter ---
+        const allCounts: Record<string, number> = {}
+        const { data: allRead, error: allErr } = await supabase
+          .from('child_read_books')
+          .select('read_at')
+          .eq('child_id', childData.id)
+
+        if (!allErr && allRead) {
+          (allRead as { read_at: string }[]).forEach(r => {
+            const date = new Date(r.read_at)
+            const monthKey = date.toLocaleString('sv-SE', { month: 'long', year: 'numeric' })
+            allCounts[monthKey] = (allCounts[monthKey] || 0) + 1
+          })
+        }
+
+        setMonthlyCounts(allCounts)
       }
       setLoading(false)
     }
@@ -92,21 +109,34 @@ export default function Home() {
 
   const firstRecent = useMemo(() => recentBooks[0], [recentBooks])
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+    } catch (e) {
+      console.error('Logout error', e)
+    } finally {
+      localStorage.removeItem('loggedChild')
+      localStorage.removeItem('user')
+      window.location.replace('/read-more-books')
+    }
+  }
+
   const menuItems = [
     { to: '/home', label: 'Hem', icon: <FaHome /> },
     { to: '/booksearch', label: 'Sök efter böcker', icon: <FaSearch /> },
     { to: '/read', label: 'Böcker jag har läst', icon: <FaBookOpen /> },
+    { action: handleLogout, label: 'Logga ut', icon: <FaSignOutAlt /> },
   ]
 
   return (
     <div className="min-h-screen bg-pink-100">
       <KidsNav items={menuItems} title="VI LÄSER!" />
 
-      <div className="px-4 pt-6 pb-10 flex flex-col items-center justify-start">
-        <h1 className="text-3xl font-bold mb-2">
+      <div className="px-4 pb-10 flex flex-col items-center justify-start">
+        <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">
           Välkommen {childData?.name || 'Barnet'}! 🎉
         </h1>
-        <p className="text-lg text-center mb-6">
+        <p className="text-lg text-purple-600 mb-6 text-center">
           Här kan ni börja läsa och ha kul tillsammans.
         </p>
 
@@ -118,17 +148,26 @@ export default function Home() {
           Sök böcker
         </button>
 
-        {/* Snabbt: Fortsätt läsa om det finns något nyligen läst */}
-        {firstRecent && (
-          <button
-            onClick={() => navigate('/read')}
-            className="w-full max-w-xs bg-yellow-400 text-pink-700 px-6 py-3 rounded-xl font-bold shadow-md active:scale-95 transition mb-6"
-          >
-            Fortsätt läsa: {firstRecent.title?.slice(0, 28) || 'bok'} →
-          </button>
-        )}
+        {/* --- Monthly counter --- */}
+        <div className="w-full max-w-md mb-6 p-4 bg-white rounded-2xl shadow-sm">
+          {Object.keys(monthlyCounts).length === 0 ? (
+            <p className="text-sm text-gray-500">Inga böcker lästa ännu.</p>
+          ) : (
+            <ul className="text-sm text-gray-700 space-y-1">
+               {Object.entries(monthlyCounts).map(([month, count]) => (
+                <div className='text-center'>
+                <h2 className="text-base font-semibold text-gray-700 mb-2">Böcker lästa {month}</h2>
+                <li key={month}>
+                    <span className="font-semibold text-4xl">{count}</span>
+                </li>
+                </div>
+              ))}
+            </ul>
 
-        {/* Senaste tre lästa – 3 kolumner med jämn gap */}
+          )}
+        </div>
+
+        {/* Senaste tre lästa */}
         <div className="w-full max-w-md">
           <h2 className="text-base font-semibold text-gray-700 mb-3">Senaste lästa</h2>
 
@@ -163,7 +202,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* 🔖 Dagens läsutmaning – från JSON för ålder 0–5, stabilt per dag */}
+        {/* Dagens läsutmaning */}
         <div className="w-full max-w-md mt-6 p-4 bg-white rounded-2xl shadow-sm">
           {todaysChallenge ? (
             <>
@@ -193,7 +232,6 @@ export default function Home() {
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">
           Högläsning i förskolan
         </h1>
-
         <div className="space-y-4 text-slate-800 leading-relaxed text-lg">
           <p>
             Förskolan arbetar aktivt med högläsning eftersom det är en viktig del av barns språkutveckling och lärande. När barn får lyssna på sagor och berättelser tränar de sitt ordförråd, sin förståelse och sin förmåga att uttrycka tankar och känslor.

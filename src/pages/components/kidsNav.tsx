@@ -2,8 +2,11 @@ import { useState, useEffect, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FaBars, FaTimes } from 'react-icons/fa'
 
-type NavItem = { to: string; label: string; icon?: ReactNode }
+type NavItem =
+  | { to: string; label: string; icon?: ReactNode }               // länk som tidigare
+  | { action: () => void | Promise<void>; label: string; icon?: ReactNode } // ny: knapp med onClick
 type KidsNavProps = { items: NavItem[]; title?: string }
+
 
 /**
  * Tuning-konstanter:
@@ -131,34 +134,54 @@ export default function KidsNav({ items, title = 'VI LÄSER!' }: KidsNavProps) {
             <ul
               className="
                 bg-white
-                rounded-3xl shadow-xl p-3
+                rounded-3xl p-3
                 space-y-2 border border-white/60
               "
               role="menu"
               aria-label="Menyval"
             >
-              {items.map((item) => {
-                const active = location.pathname === item.to
+
+              {items.map((item, idx) => {
+                const isLink = 'to' in item
+                const active = isLink && location.pathname === item.to
+
+                const baseClasses = `
+    flex items-center gap-3 px-3 py-3 rounded-2xl transition shadow-sm active:scale-95
+    ${isLink && active
+                    ? 'bg-fuchsia-50 text-fuchsia-700 ring-2 ring-fuchsia-200'
+                    : 'bg-gradient-to-r from-amber-50 to-emerald-50 text-slate-700 hover:from-amber-100 hover:to-emerald-100'}
+  `
+
                 return (
-                  <li key={item.to} role="none">
-                    <Link
-                      to={item.to}
-                      role="menuitem"
-                      onClick={() => setOpen(false)}
-                      className={`
-                        flex items-center gap-3 px-3 py-3 rounded-2xl transition shadow-sm active:scale-95
-                        ${active
-                          ? 'bg-fuchsia-50 text-fuchsia-700 ring-2 ring-fuchsia-200'
-                          : 'bg-gradient-to-r from-amber-50 to-emerald-50 text-slate-700 hover:from-amber-100 hover:to-emerald-100'
-                        }
-                      `}
-                    >
-                      {item.icon ? <span className="text-lg">{item.icon}</span> : null}
-                      <span className="font-semibold">{item.label}</span>
-                    </Link>
+                  <li key={isLink ? item.to : `action-${idx}`} role="none">
+                    {isLink ? (
+                      <Link
+                        to={item.to}
+                        role="menuitem"
+                        onClick={() => setOpen(false)}
+                        className={baseClasses}
+                      >
+                        {item.icon ? <span className="text-xl">{item.icon}</span> : null}
+                        <h4 className="text-xl font-semibold">{item.label}</h4>
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={async () => {
+                          setOpen(false)
+                          await item.action()
+                        }}
+                        className={baseClasses + ' w-full text-left'}
+                      >
+                        {item.icon ? <span className="text-xl">{item.icon}</span> : null}
+                        <h4 className="font-semibold text-xl" >{item.label}</h4>
+                      </button>
+                    )}
                   </li>
                 )
               })}
+
             </ul>
           </div>
         </div>
