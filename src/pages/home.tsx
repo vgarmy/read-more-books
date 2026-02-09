@@ -139,12 +139,13 @@ export default function Home() {
         </p>
 
         {/* Primär CTA */}
-        <button
-          onClick={() => navigate('/read-more-books/booksearch')}
-          className="w-full max-w-xs bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg active:scale-95 transition mb-6"
-        >
-          Sök böcker
-        </button>
+    <div className="relative inline-block w-full max-w-xs mb-6">
+    <button onClick={() => navigate('/read-more-books/booksearch')} aria-label="Sök böcker"
+    className="relative z-10 inline-flex w-full items-center justify-center gap-2 font-own font-bold uppercase tracking-[0.8px] text-xl leading-5 px-6 py-[13px] rounded-2xl bg-[#1899D6] text-white transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-lg disabled:cursor-default disabled:opacity-70 select-none focus:outline-none active:[&+span]:translate-y-[1px]">
+      <FaSearch size={18} />
+      Sök böcker</button>
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-2xl bg-[#1CB0F6] transition-transform duration-150"></span>
+      </div>
 
         {/* --- Monthly counter --- */}
         <div className="w-full max-w-md mb-6 p-4 bg-white rounded-2xl shadow-sm">
@@ -152,12 +153,12 @@ export default function Home() {
             <p className="text-sm text-gray-500">Inga böcker lästa ännu.</p>
           ) : (
             <ul className="text-sm text-gray-700 space-y-1">
-               {Object.entries(monthlyCounts).map(([month, count]) => (
+              {Object.entries(monthlyCounts).map(([month, count]) => (
                 <div className='text-center'>
-                <h2 className="text-base font-semibold text-gray-700 mb-2">Böcker lästa {month}</h2>
-                <li key={month}>
+                  <h2 className="text-base font-semibold text-gray-700 mb-2">Böcker lästa {month}</h2>
+                  <li key={month}>
                     <span className="font-semibold text-4xl">{count}</span>
-                </li>
+                  </li>
                 </div>
               ))}
             </ul>

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Scanner } from '@yudiel/react-qr-scanner'
 import type { IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import { supabase } from '../supabaseClient'
-import { FaCamera, FaBookOpen, FaSignInAlt } from 'react-icons/fa'
+import { FaCamera, FaBookOpen, FaSignInAlt, FaTimes } from 'react-icons/fa'
 import KidsNav from './components/kidsNav'
 
 export default function Login() {
@@ -107,7 +107,7 @@ export default function Login() {
                 aria-label="Starta kamera för att skanna QR-kod"
                 className={[
                   "relative z-10 inline-flex w-full items-center justify-center gap-2 align-middle whitespace-nowrap",
-                  "font-sans font-bold uppercase tracking-[0.8px] text-xl leading-5",
+                  "font-bold uppercase tracking-[0.8px] text-xl leading-5",
                   "py-[13px] px-4 rounded-2xl text-white bg-[#1899D6]",
                   "transition duration-200 hover:brightness-110 active:translate-y-[1px]",
                   "disabled:cursor-default disabled:opacity-70",
@@ -134,12 +134,34 @@ export default function Login() {
                 />
               </div>
 
-              <button
-                onClick={() => setScanning(false)}
-                className="w-full mt-3 bg-red-400 text-white py-2.5 rounded-xl font-semibold shadow-md active:scale-95 transition"
-              >
-                Avbryt
-              </button>
+
+              <div className="relative inline-block w-full mt-3">
+                {/* Knappen */}
+                <button
+                  onClick={() => setScanning(false)}
+                  aria-label="Avbryt"
+                  className="
+      relative z-10 inline-flex w-full items-center justify-center gap-2
+      align-middle whitespace-nowrap font-own font-bold uppercase tracking-[0.8px] text-xl leading-5
+      py-[10px] px-4 rounded-2xl bg-[#F87171] text-white transition duration-200 hover:brightness-110 active:translate-y-[1px]
+      shadow-mddisabled:cursor-default disabled:opacity-70 select-none focus:outline-none active:[&+span]:translate-y-[1px]
+    "
+                >
+                  <FaTimes size={18} />
+                  Avbryt
+                </button>
+
+                {/* Bottenplattan */}
+                <span
+                  aria-hidden="true"
+                  className="
+      pointer-events-none absolute inset-x-0 top-0 bottom-[-4px]
+      rounded-2xl bg-[#FCA5A5]
+      transition-transform duration-150
+    "
+                />
+              </div>
+
             </div>
           )}
         </section>

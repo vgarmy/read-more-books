@@ -211,13 +211,34 @@ export default function BookSearch() {
       <div className="flex flex-col items-center px-8 pb-10">
         <h1 className="text-4xl font-extrabold text-center text-purple-600 mb-6">Sök efter böcker</h1>
 
-        <div className="flex w-full max-w-md mb-4 gap-2">
-          <input type="text" placeholder="Skriv titel eller författare" value={query} onChange={e => setQuery(e.target.value)} className="flex-1 px-4 py-3 text-black placeholder:text-gray-500 bg-white border-2 border-blue-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
-          <button onClick={handleSearch} className="bg-blue-400 text-white px-4 py-3 rounded-xl font-semibold hover:bg-blue-500 transition-colors">Sök</button>
+        <div className="flex w-full max-w-md mb-4 flex-col gap-3">
+          <input type="text" placeholder="Skriv titel eller författare" value={query} onChange={e => setQuery(e.target.value)} className="w-full px-4 py-3 text-black placeholder:text-gray-500 bg-white border-2 border-blue-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+        <div className="relative inline-block w-full max-w-md">
+          <button
+            onClick={async () => { if (!loading) await handleSearch(); }}
+            disabled={loading}
+            aria-busy={loading}
+            aria-disabled={loading}
+            aria-live="polite"
+            className="relative z-10 inline-flex w-full items-center justify-center gap-2 font-own font-bold uppercase tracking-[0.8px] text-xl leading-5 px-4 py-[13px] rounded-2xl bg-blue-400 text-white transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-md select-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-80 active:[&+span]:translate-y-[1px]"
+          >
+            {loading ? (
+              <>
+                <span className="inline-block h-4 w-4 rounded-full border-2 border-white/80 border-t-transparent animate-spin"></span>
+                Laddar
+              </>
+            ) : (
+              <>
+                <FaSearch size={18} />
+                Sök
+              </>
+            )}
+          </button>
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-2xl bg-blue-300 transition-transform duration-150"></span>
         </div>
 
-        {loading && <p>Laddar...</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
 
         <div className="grid grid-cols-2 gap-4 w-full mt-4 px-1">
           {books.map((book, i) => {
@@ -234,8 +255,12 @@ export default function BookSearch() {
           })}
         </div>
 
-        <button onClick={() => navigate('/read-more-books/read')} className="mt-6 bg-purple-400 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-500 transition-colors">Se lästa böcker</button>
-
+        <div className="relative inline-block mt-6 w-full">
+          <button onClick={() => navigate('/read-more-books/read')} className="relative z-10 gap-2 w-full inline-flex items-center justify-center font-own font-bold uppercase tracking-[0.8px] text-xl leading-5 px-6 py-[13px] rounded-2xl bg-purple-400 text-white transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-md select-none focus:outline-none active:[&+span]:translate-y-[1px]">
+            <FaBookOpen size={18} />
+            Se lästa böcker</button>
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-2xl bg-purple-300 transition-transform duration-150"></span>
+        </div>
         {/* MODAL */}
         {modalBook && (
           <div className={`fixed inset-0 flex items-center justify-center bg-black/75 z-50 p-10 transition-opacity duration-300 ${modalVisible ? 'opacity-100' : 'opacity-0'}`}>
