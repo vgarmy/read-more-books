@@ -139,7 +139,7 @@ export default function Home() {
         </p>
 
         {/* Primär CTA */}
-    <div className="relative inline-block w-full max-w-xs mb-6">
+    <div className="relative inline-block w-full max-w-md mb-6">
     <button onClick={() => navigate('/read-more-books/booksearch')} aria-label="Sök böcker"
     className="relative z-10 inline-flex w-full items-center justify-center gap-2 font-own font-bold uppercase tracking-[0.8px] text-xl leading-5 px-6 py-[13px] rounded-2xl bg-[#1899D6] text-white transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-lg disabled:cursor-default disabled:opacity-70 select-none focus:outline-none active:[&+span]:translate-y-[1px]">
       <FaSearch size={18} />

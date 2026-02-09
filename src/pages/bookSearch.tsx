@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import KidsNav from './components/kidsNav'
-import { FaHome, FaSearch, FaBookOpen, FaSignOutAlt, FaStar, FaRegStar, FaTimes } from 'react-icons/fa'
+import { FaHome, FaSearch, FaBookOpen, FaSignOutAlt, FaStar, FaRegStar, FaTimes, FaBook } from 'react-icons/fa'
 import { supabase } from '../supabaseClient'
 
 interface Book {
@@ -238,7 +238,7 @@ export default function BookSearch() {
           <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-2xl bg-blue-300 transition-transform duration-150"></span>
         </div>
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {error && <p className="text-red-500 mt-2">{error}</p>}
 
         <div className="grid grid-cols-2 gap-4 w-full mt-4 px-1">
           {books.map((book, i) => {
@@ -249,8 +249,22 @@ export default function BookSearch() {
                 <p className="font-semibold text-center text-sm text-gray-700 leading-tight line-clamp-2">{book.title}</p>
                 <p className="text-xs text-center text-gray-500 line-clamp-1">{book.author}</p>
                 {book.freeUrl && <a href={book.freeUrl} target="_blank" rel="noopener noreferrer" className="mt-1 text-xs text-blue-500 underline">Se online</a>}
-                {isRead ? <button disabled className="mt-2 w-full bg-gray-300 text-gray-600 text-xs py-1.5 rounded-lg cursor-not-allowed">Redan läst</button> : <button onClick={() => setModalBook(book)} className="mt-2 w-full bg-green-400 text-white text-xs py-1.5 rounded-lg hover:bg-green-500">Jag har läst</button>}
-              </div>
+                {isRead ? (
+  <div className="relative inline-block w-full mt-2">
+    <button disabled className="relative z-10 inline-flex w-full gap-2 items-center justify-center font-own text-sm px-3 py-1.5 rounded-lg bg-gray-300 text-gray-600 font-semibold shadow-md select-none focus:outline-none opacity-80 cursor-not-allowed">
+      <FaBook size={12} />
+      Redan läst</button>
+    <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-lg bg-gray-200"></span>
+  </div>
+) : (
+  <div className="relative inline-block w-full mt-2">
+    <button onClick={() => setModalBook(book)} className="relative font-own z-10 inline-flex w-full gap-2 items-center justify-center text-sm px-3 py-1.5 rounded-lg bg-green-400 text-white font-semibold transition duration-200 hover:brightness-110 active:translate-y-[1px] shadow-md select-none focus:outline-none active:[&+span]:translate-y-[1px]">
+      <FaBookOpen size={12}/>
+      Jag har läst</button>
+    <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 bottom-[-4px] rounded-lg bg-green-300 transition-transform duration-150"></span>
+  </div>
+)}
+                </div>
             )
           })}
         </div>
